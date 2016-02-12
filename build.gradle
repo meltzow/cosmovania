@@ -28,6 +28,7 @@ allprojects {
 		maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 		maven { url 'http://updates.jmonkeyengine.org/maven' }	
 		maven { url 'http://jcenter.bintray.com' }
+		maven { url "https://jitpack.io" }
 	}
 	
 	pmd {
