@@ -4,11 +4,12 @@ import com.simsilica.es.Entity;
 
 import controller.ECS.LogicLoop;
 import controller.ECS.Processor;
-import model.ES.component.LifeTime;
-import model.ES.component.ToRemove;
-import model.ES.component.assets.Attrition;
-import model.ES.component.assets.damage.DamageOverTime;
-import model.ES.component.interaction.Damaging;
+import model.ES.component.combat.damage.DamageOverTime;
+import model.ES.component.combat.damage.Damaging;
+import model.ES.component.combat.resistance.Attrition;
+import model.ES.component.combat.resistance.Shield;
+import model.ES.component.lifeCycle.LifeTime;
+import model.ES.component.lifeCycle.ToRemove;
 
 public class DamagingOverTimeProc extends Processor {
 
@@ -34,8 +35,12 @@ public class DamagingOverTimeProc extends Processor {
 				DamageApplier applier = new DamageApplier(att, dot.getType(), damagePerTick);
 				entityData.setComponent(damaging.target, applier.getResult());
 
-				if(applier.getDamageOnShield() > 0)
+				if(applier.getDamageOnShield() > 0){
 					DamageFloatingLabelCreator.create(entityData, damaging.target, dot.getType(), applier.getDamageOnShield(), true, true);
+					Shield shield = entityData.getComponent(damaging.target, Shield.class);
+					if(shield != null)
+						entityData.setComponent(damaging.target, new Shield(shield.getCapacity(), shield.getRechargeRate(), shield.getRechargeDelay(), shield.getRechargeDelay()));
+				}					
 				if(applier.getDamageOnHitPoints() > 0)
 					DamageFloatingLabelCreator.create(entityData, damaging.target, dot.getType(), applier.getDamageOnHitPoints(), false, true);
 

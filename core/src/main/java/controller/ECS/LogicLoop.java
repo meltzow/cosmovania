@@ -7,15 +7,17 @@ import controller.cameraManagement.ChasingCameraProc;
 import model.Command;
 import model.ES.processor.LifeTimeProc;
 import model.ES.processor.ParentingCleanerProc;
-import model.ES.processor.RemoveProc;
+import model.ES.processor.RemovedCleanerProc;
+import model.ES.processor.RemoverProc;
 import model.ES.processor.AI.BehaviorTreeProc;
 import model.ES.processor.ability.AbilityCoolDownProc;
 import model.ES.processor.ability.AbilityProc;
 import model.ES.processor.ability.AbilityTriggerResetProc;
 import model.ES.processor.ability.BoostProc;
 import model.ES.processor.ability.ProjectileLauncherProc;
-import model.ES.processor.ability.SpawningProc;
 import model.ES.processor.ability.TriggerRepeaterProc;
+import model.ES.processor.combat.resistance.ShieldProc;
+import model.ES.processor.combat.resistance.SpawnOnShieldDepletedProc;
 import model.ES.processor.command.NeededRotationProc;
 import model.ES.processor.command.NeededThrustProc;
 import model.ES.processor.command.PlayerAbilityControlProc;
@@ -23,6 +25,8 @@ import model.ES.processor.holder.BoneHoldingProc;
 import model.ES.processor.holder.PlanarHoldingProc;
 import model.ES.processor.interaction.DestroyedOnTouchProc;
 import model.ES.processor.interaction.ShockwaveOnTouchProc;
+import model.ES.processor.interaction.SpawnMultipleOnBornProc;
+import model.ES.processor.interaction.SpawnOnDecayProc;
 import model.ES.processor.interaction.SpawnOnTouchProc;
 import model.ES.processor.interaction.TouchingClearingProc;
 import model.ES.processor.interaction.damage.DamageOnTouchProc;
@@ -41,10 +45,7 @@ import model.ES.processor.senses.SightProc;
 import model.ES.processor.shipGear.AttritionProc;
 import model.ES.processor.shipGear.LightThrusterProc;
 import model.ES.processor.shipGear.RotationThrusterProc;
-import model.ES.processor.shipGear.SpawnOnDeathProc;
 import model.ES.processor.shipGear.ThrusterProc;
-import model.world.WorldData;
-import view.drawingProcessors.particle.ParticleThrusterProc;
 
 public class LogicLoop implements Runnable {
     private AppStateManager stateManager;
@@ -54,10 +55,10 @@ public class LogicLoop implements Runnable {
     private static int millisPerTick = 20;
     private static double secondPerTick = (double)millisPerTick/1000;
     
-    public LogicLoop(EntityData ed, WorldData world, Command command) {
+    public LogicLoop(EntityData ed, Command command) {
     	stateManager = new AppStateManager(null);
 
-    	stateManager.attach(new DataState(ed, world, command));
+    	stateManager.attach(new DataState(ed, command));
 
 		stateManager.attach(new ChasingCameraProc());
 		stateManager.attach(new RotationThrusterProc());
@@ -91,12 +92,14 @@ public class LogicLoop implements Runnable {
 		stateManager.attach(new TriggerRepeaterProc());
 		
 		
-		stateManager.attach(new SpawningProc());
+		stateManager.attach(new SpawnMultipleOnBornProc());
 		stateManager.attach(new ProjectileLauncherProc());
 
 		stateManager.attach(new DamagingProc());
 		stateManager.attach(new DamagingOverTimeProc());
 		stateManager.attach(new AttritionProc());
+		stateManager.attach(new ShieldProc());
+		stateManager.attach(new SpawnOnShieldDepletedProc());
 
 		stateManager.attach(new SightProc());
 		
@@ -106,8 +109,10 @@ public class LogicLoop implements Runnable {
 		stateManager.attach(new ShockwaveOnTouchProc());
 		
 		stateManager.attach(new LifeTimeProc());
-		stateManager.attach(new SpawnOnDeathProc());
-		stateManager.attach(new RemoveProc());
+		stateManager.attach(new SpawnOnDecayProc());
+		
+		stateManager.attach(new RemovedCleanerProc());
+		stateManager.attach(new RemoverProc());
 		stateManager.attach(new ParentingCleanerProc());
     }
 

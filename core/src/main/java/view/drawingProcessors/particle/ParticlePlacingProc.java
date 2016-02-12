@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.OnscreenKeyboard;
 import com.jme3.effect.Particle;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh.Type;
 import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.material.Material;
@@ -15,9 +16,9 @@ import com.simsilica.es.Entity;
 import app.AppFacade;
 import controller.ECS.Processor;
 import model.ES.component.Naming;
+import model.ES.component.assets.ParticleCaster;
 import model.ES.component.motion.PlanarStance;
 import model.ES.component.motion.SpaceStance;
-import model.ES.component.visuals.ParticleCaster;
 import util.LogUtil;
 import util.geometry.geom2d.Point2D;
 import util.geometry.geom3d.Point3D;
@@ -45,9 +46,14 @@ public class ParticlePlacingProc extends Processor {
 		Point3D pos = stance.getCoord().get3D(stance.elevation);
 		Point3D velocity = Point2D.ORIGIN.getTranslation(stance.orientation.getValue(), caster.getInitialSpeed()).get3D(0);
 
-		MyParticleEmitter pe = SpatialPool.emitters.get(e.getId());
+		ParticleEmitter pe = SpatialPool.emitters.get(e.getId());
 		pe.setLocalTranslation(TranslateUtil.toVector3f(pos));
 		pe.getParticleInfluencer().setInitialVelocity(TranslateUtil.toVector3f(velocity));
+		
+		// the all at once behavior is launched here, because the emitter needs to be well placed before that call.
+		if(caster.isAllAtOnce())
+			pe.emitAllParticles();
+
 
 //		// trick to interpolate position of the particles when emitter moves between two frames
 //		// as jMonkey doesn't manage it

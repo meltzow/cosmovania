@@ -7,14 +7,14 @@ import com.simsilica.es.Entity;
 import com.simsilica.es.EntityId;
 
 import controller.ECS.Processor;
-import model.ES.component.Cooldown;
-import model.ES.component.assets.Ability;
-import model.ES.component.assets.Projectile;
-import model.ES.component.assets.ProjectileLauncher;
-import model.ES.component.assets.damage.DamageCapacity;
-import model.ES.component.command.PlanarNeededThrust;
-import model.ES.component.hierarchy.Parenting;
-import model.ES.component.interaction.SpawnOnTouch;
+import model.ES.component.Parenting;
+import model.ES.component.ability.Ability;
+import model.ES.component.ability.Cooldown;
+import model.ES.component.combat.damage.DamageCapacity;
+import model.ES.component.combat.damage.Projectile;
+import model.ES.component.combat.damage.ProjectileLauncher;
+import model.ES.component.lifeCycle.SpawnOnTouch;
+import model.ES.component.motion.PlanarNeededThrust;
 import model.ES.component.motion.PlanarStance;
 import model.ES.component.motion.PlanarVelocityToApply;
 import model.ES.component.motion.physic.Physic;
@@ -76,7 +76,7 @@ public class ProjectileLauncherProc extends Processor {
 					SpawnOnTouch spawn = entityData.getComponent(eid, SpawnOnTouch.class);
 					List<String> blueprintNames = new ArrayList<>();
 					if(spawn != null)
-						blueprintNames = spawn.getBlueprintNames();
+						blueprintNames.addAll(spawn.getBlueprintNames());
 					blueprintNames.add(damageCapacity.getBlueprintOnImpact());
 					entityData.setComponent(eid, new SpawnOnTouch(blueprintNames));
 				}

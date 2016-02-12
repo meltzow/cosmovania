@@ -4,11 +4,9 @@ import com.jme3.scene.Node;
 
 import app.AppFacade;
 import controller.SpatialSelector;
-import presenter.worldEdition.HeightMapToolPresenter;
-import presenter.worldEdition.PopulationToolPresenter;
-import presenter.worldEdition.Tool;
+import model.EditorPlatform;
+import model.ES.processor.world.WorldProc;
 import presenter.worldEdition.WorldTool;
-import presenter.worldEdition.atlas.AtlasToolPresenter;
 import util.LogUtil;
 import util.geometry.geom2d.Point2D;
 import view.WorldEditorTab;
@@ -27,7 +25,7 @@ public class WorldEditorPresenter {
 	}
 	
 	public void saveWorld(){
-		EditorPlatform.getWorldData().saveDrawnRegions();
+		AppFacade.getStateManager().getState(WorldProc.class).saveDrawnRegions();
 	}
 	
 	public void handleTabOpened(){

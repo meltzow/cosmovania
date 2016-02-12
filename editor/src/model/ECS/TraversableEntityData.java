@@ -5,11 +5,10 @@ import java.util.Map;
 
 import com.simsilica.es.EntityComponent;
 import com.simsilica.es.EntityId;
-import com.simsilica.es.base.DefaultEntityData;
 
 import javafx.application.Platform;
 import model.ES.component.Naming;
-import model.ES.component.hierarchy.Parenting;
+import model.ES.component.Parenting;
 import presenter.common.EntityNode;
 
 /***
@@ -19,9 +18,11 @@ import presenter.common.EntityNode;
  * @author benoit
  *
  */
-public class TraversableEntityData extends DefaultEntityData{
+public class TraversableEntityData extends SavableEntityData{
 	private final EntityNode rootEntityNode;
 	private final Map<EntityId, EntityNode> entityNodes = new HashMap<>();
+	
+	
 
 	public TraversableEntityData() {
 		rootEntityNode = new EntityNode(null, "root");
@@ -42,22 +43,13 @@ public class TraversableEntityData extends DefaultEntityData{
 	}
 
 	@Override
-	public EntityId createEntity() {
-		EntityId res = super.createEntity();
-		Platform.runLater(() -> {
-			EntityNode ep = new EntityNode(res, "Just created. Should not be seen.");
-			rootEntityNode.childrenListProperty().add(ep);
-			entityNodes.put(ep.getEntityId(), ep);
-		});
-		return res;
-	}
-	
-	@Override
 	public void removeEntity(EntityId eid) {
 		super.removeEntity(eid);
+		
 		Platform.runLater(() -> {
-			Parenting parenting = getComponent(eid, Parenting.class);
-			removeNodeFromParent(getNode(eid), parenting);
+			// after the entity has been removed, the node will necessarily be in the root node.
+			if(!rootEntityNode.childrenListProperty().remove(getNode(eid)))
+				throw new RuntimeException("rootnode should have contained the removed entity node");
 			entityNodes.remove(eid);
 		});
 	}
@@ -72,42 +64,54 @@ public class TraversableEntityData extends DefaultEntityData{
 	
 	private void removeNodeFromParent(EntityNode ep, Parenting parenting){
 		if(parenting != null){
-			EntityNode parentPresenter = getNode(parenting.getParent());
-			if(parentPresenter != null)
-				parentPresenter.childrenListProperty().remove(ep);
-		} else
+			EntityNode parentNode = getNode(parenting.getParent());
+			if(parentNode != null)
+				parentNode.childrenListProperty().remove(ep);
+		} else{
 			rootEntityNode.childrenListProperty().remove(ep);
+		}
 	}
 	
 	private void handleComponentChange(EntityId eid, Class<? extends EntityComponent> compClass, EntityComponent lastComp, EntityComponent newComp){
 		Platform.runLater(() -> {
-				if(compClass == Parenting.class){
-					removeNodeFromParent(getNode(eid), (Parenting)lastComp);
-					if(newComp != null){
-						// The entity has a new parent. We register the entity in the new parent's presenter's children list
-						EntityNode newParent = entityNodes.get(((Parenting)newComp).getParent());
-						newParent.childrenListProperty().add(getNode(eid));
-					}
-				} else if(compClass == Naming.class){
-					if(newComp != null)
-						getNode(eid).nameProperty().setValue(((Naming)newComp).getName());
+			if(!entityNodes.containsKey(eid)){
+				EntityNode ep = new EntityNode(eid, "Just created. Should not be seen.");
+				rootEntityNode.childrenListProperty().add(ep);
+				entityNodes.put(ep.getEntityId(), ep);
+			}
+		});
+
+		Platform.runLater(() -> {
+			EntityNode node = getNode(eid);
+			if(compClass == Parenting.class){
+				Parenting parenting = (Parenting)newComp;
+				removeNodeFromParent(node, (Parenting)lastComp);
+				if(newComp != null){
+					// The entity has a new parent. We register the entity in the new parent's presenter's children list
+					EntityNode newParent = entityNodes.get(parenting.getParent());
+					newParent.childrenListProperty().add(node);
 				}
-				
-				EntityNode ep = getNode(eid);
-				if(ep != null){
-					// we set the component instead of remove&add to get the correct event for listeners
-					if(lastComp != null && newComp == null){
-						// component is removed
-						ep.componentListProperty().remove(lastComp);
-					} else if(lastComp != null && newComp != null){
-						// component is replaced
-						int index = ep.componentListProperty().indexOf(lastComp);
-						ep.componentListProperty().set(index, newComp);
-					} else if(lastComp == null && newComp != null){
-						// component is added
-						ep.componentListProperty().add(newComp);
-					}
+				else
+					rootEntityNode.childrenListProperty().add(node);
+			} else if(compClass == Naming.class){
+				Naming naming = (Naming)newComp;
+				node.nameProperty().setValue(newComp == null? "Unnamed" : naming.getName());
+			}
+			
+			if(node != null){
+				// we set the component instead of remove&add to get the correct event for listeners
+				if(lastComp != null && newComp == null){
+					// component is removed
+					node.componentListProperty().remove(lastComp);
+				} else if(lastComp != null && newComp != null){
+					// component is replaced
+					int index = node.componentListProperty().indexOf(lastComp);
+					node.componentListProperty().set(index, newComp);
+				} else if(lastComp == null && newComp != null){
+					// component is added
+					node.componentListProperty().add(newComp);
 				}
+			}
 		});
 	}
 }

@@ -1,6 +1,8 @@
 package view;
 
+
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import javafx.geometry.Orientation;
@@ -9,24 +11,25 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import presenter.EditorPlatform;
+import model.EditorPlatform;
+import presentation.instrument.circleCollisionShape.CircleCollisionShapeInstrument;
+import presentation.instrument.planarStance.PlanarStanceInstrument;
+import presentation.resources.ResourcesTab;
+import presentation.scene.SceneTab;
 import presenter.OverviewPresenter;
 import presenter.util.UserComponentList;
-import view.instrument.circleCollisionShape.CircleCollisionShapeInstrument;
-import view.instrument.planarStance.PlanarStanceInstrument;
 
 public class Overview {
 	private final OverviewPresenter presenter = new OverviewPresenter();
 	
-	public Overview(Stage stage) {
-		SceneView sceneViewer = new SceneView();
+	public Overview(Stage stage) throws IOException {
+		SceneTab sceneViewer = new SceneTab();
 		
-		BorderPane scenePane = new BorderPane(sceneViewer, new RunPanel(), null, null, null);
-		
-		SplitPane leftRegion = new SplitPane(new TabPane(new HierarchyTab()), new TabPane(new ResourceTab()));
+		BorderPane scenePane = new BorderPane(new TabPane(sceneViewer), new RunPanel(), null, null, null);
+		SplitPane leftRegion = new SplitPane(new TabPane(new presentation.hierarchy.HierarchyTab()), new TabPane(new ResourcesTab()));
 		leftRegion.setOrientation(Orientation.VERTICAL);
 		
-		TabPane editors = new TabPane(new InspectorTab(), new WorldEditorTab(), new ReportTab());
+		TabPane editors = new TabPane(new presentation.inspector.InspectorTab(), new WorldEditorTab(), new presentation.report.ReportTab());
 		editors.setMinWidth(300);
 		editors.setMaxWidth(500);
 
@@ -42,13 +45,14 @@ public class Overview {
 		
 		
 
+		//Scene s = new Scene(FXMLLoader.load(presentation.overview.Overview.class.getResource("test.fxml")));
 		Scene s = new Scene(root);
 		try {
 			s.getStylesheets().add(new File("assets/interface/darktheme.css").toURI().toURL().toString());
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 		}
-		sceneViewer.registerKeyInputs(s);
+		((presentation.scene.SceneView)sceneViewer.getContent()).registerKeyInputs(s);
 		stage.setScene(s);
 		stage.show();
 		stage.setTitle("Alchimist, Zay's Entity Editor");

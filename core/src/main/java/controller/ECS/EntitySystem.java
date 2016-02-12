@@ -1,14 +1,22 @@
 package controller.ECS;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppState;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.simsilica.es.EntityData;
+
+import app.AppFacade;
 import model.Command;
 import model.ES.processor.command.PlayerRotationControlProc;
 import model.ES.processor.command.PlayerThrustControlProc;
 import model.ES.processor.world.WorldProc;
-import model.world.WorldData;
-import util.LogUtil;
 import view.drawingProcessors.CameraPlacingProc;
 import view.drawingProcessors.LightProc;
-import view.drawingProcessors.RagdollProc;
 import view.drawingProcessors.audio.AbilityAudioProc;
 import view.drawingProcessors.audio.AudioSourcePlacingProc;
 import view.drawingProcessors.audio.AudioSourceProc;
@@ -21,21 +29,8 @@ import view.drawingProcessors.particle.ParticleProc;
 import view.drawingProcessors.particle.ParticleThrusterProc;
 import view.drawingProcessors.sprite.SpritePlacingProc;
 import view.drawingProcessors.sprite.SpriteProc;
-import view.drawingProcessors.ui.EdgeCollisionShapeDrawingProc;
 import view.drawingProcessors.ui.FloatingLabelProc;
 import view.drawingProcessors.ui.VelocityVisualisationProc;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.jme3.app.state.AbstractAppState;
-import com.jme3.app.state.AppState;
-import com.jme3.app.state.AppStateManager;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.simsilica.es.EntityData;
-
-import app.AppFacade;
 
 public class EntitySystem extends AbstractAppState {
 	private AppStateManager stateManager;
@@ -43,7 +38,6 @@ public class EntitySystem extends AbstractAppState {
 	public final LogicLoop loop; 
 
 	private final EntityData ed;
-	private final WorldData world;
 	private final Command command;
 
 	
@@ -52,11 +46,10 @@ public class EntitySystem extends AbstractAppState {
 	List<AppState> commandStates = new ArrayList<>();
 	List<AppState> logicStates = new ArrayList<>();
 
-	public EntitySystem(EntityData ed, WorldData world, Command command) {
+	public EntitySystem(EntityData ed, Command command) {
 		this.ed = ed;
-		this.world = world;
 		this.command = command;
-		loop = new LogicLoop(ed, world, command);
+		loop = new LogicLoop(ed, command);
 		
 		
 		visualStates.add(new ModelProc());
@@ -89,8 +82,8 @@ public class EntitySystem extends AbstractAppState {
 	@Override
 	public void stateAttached(AppStateManager stateManager) {
 		this.stateManager = stateManager;
-		stateManager.attach(new DataState(ed, world, command));
-    	stateManager.attach(new WorldProc(world));
+		stateManager.attach(new DataState(ed, command));
+    	//stateManager.attach(new WorldProc());
     	stateManager.attach(new CommandState(command));
     	stateManager.attach(new SceneSelectorState());
 	}
