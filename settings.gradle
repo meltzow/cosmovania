@@ -1,2 +1,3 @@
 rootProject.name = 'cosmovania'
-include 'core', 'editor'
+include 'core'
+//include 'editor'
