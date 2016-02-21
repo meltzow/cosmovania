@@ -29,7 +29,7 @@ public class FloatingLabelProc extends Processor implements JmeProcessor {
 	}
 
 	public FloatingLabelProc() {
-		font = AppFacade.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+		
 	}
 	
 	@Override
@@ -39,6 +39,7 @@ public class FloatingLabelProc extends Processor implements JmeProcessor {
 	
 	@Override
 	protected void onEntityAdded(Entity e) {
+		font = AppFacade.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
 		FloatingLabel label = e.get(FloatingLabel.class);
 		
 		BitmapText bt = new BitmapText(font);
