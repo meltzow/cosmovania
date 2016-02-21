@@ -1,5 +1,7 @@
 package model.ES.processor.command;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import model.ES.component.motion.MotionCapacity;
 import model.ES.component.motion.PlanarNeededRotation;
 import model.ES.component.motion.PlanarStance;
@@ -11,7 +13,11 @@ import com.simsilica.es.Entity;
 import controller.ECS.LogicLoop;
 import controller.ECS.Processor;
 
-public class NeededRotationProc extends Processor {
+public class NeededRotationProc extends Processor implements JmeProcessor {
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.COMMAND;
+	}
 	
 	@Override
 	protected void registerSets() {

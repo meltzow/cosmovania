@@ -1,5 +1,7 @@
 package view.drawingProcessors.model;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import model.ES.component.assets.Model;
 import model.ES.component.motion.PlanarStance;
 import util.LogUtil;
@@ -15,8 +17,12 @@ import com.simsilica.es.Entity;
 
 import controller.ECS.Processor;
 
-public class ModelPlacingProc extends Processor {
+public class ModelPlacingProc extends Processor implements JmeProcessor  {
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
+	
 	@Override
 	protected void registerSets() {
 		registerDefault(Model.class, PlanarStance.class);

@@ -3,6 +3,9 @@ package view.drawingProcessors.particle;
 import java.util.ArrayList;
 import java.util.List;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.OnscreenKeyboard;
 import com.jme3.effect.Particle;
 import com.jme3.effect.ParticleEmitter;
@@ -26,7 +29,11 @@ import view.SpatialPool;
 import view.jme.MyParticleEmitter;
 import view.math.TranslateUtil;
 
-public class ParticlePlacingProc extends Processor {
+public class ParticlePlacingProc extends Processor implements JmeProcessor {
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
 	
 	@Override
 	protected void registerSets() {

@@ -3,6 +3,9 @@ package view.drawingProcessors;
 import java.util.ArrayList;
 import java.util.List;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
@@ -28,8 +31,12 @@ import util.math.AngleUtil;
 import view.SpatialPool;
 import view.math.TranslateUtil;
 
-public class LightProc extends Processor {
+public class LightProc extends Processor implements JmeProcessor {
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
+	
 	@Override
 	protected void registerSets() {
 		register("space", SpaceStance.class, Lighting.class);

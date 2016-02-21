@@ -1,5 +1,8 @@
 package view.drawingProcessors.model;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.simsilica.es.Entity;
 
 import controller.ECS.LogicLoop;
@@ -9,8 +12,12 @@ import model.ES.component.assets.ModelRotation;
 import util.math.Angle;
 import util.math.AngleUtil;
 
-public class ModelRotationProc extends Processor {
+public class ModelRotationProc extends Processor implements JmeProcessor {
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
+	
 	@Override
 	protected void registerSets() {
 		registerDefault(Model.class, ModelRotation.class);

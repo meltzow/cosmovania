@@ -1,5 +1,8 @@
 package model.ES.processor.command;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.simsilica.es.Entity;
 
 import controller.ECS.Processor;
@@ -10,7 +13,11 @@ import model.ES.component.motion.PlanarVelocityToApply;
 import util.LogUtil;
 import util.geometry.geom2d.Point2D;
 
-public class NeededThrustProc extends Processor {
+public class NeededThrustProc extends Processor implements JmeProcessor {
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.COMMAND;
+	}
 	
 	@Override
 	protected void registerSets() {

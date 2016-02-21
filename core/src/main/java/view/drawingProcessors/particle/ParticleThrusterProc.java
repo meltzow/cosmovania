@@ -1,5 +1,8 @@
 package view.drawingProcessors.particle;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.jme3.effect.ParticleEmitter;
 import com.simsilica.es.Entity;
 
@@ -15,8 +18,12 @@ import util.math.Fraction;
 import view.SpatialPool;
 import view.jme.MyParticleEmitter;
 
-public class ParticleThrusterProc extends Processor {
+public class ParticleThrusterProc extends Processor implements JmeProcessor  {
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
+	
 	@Override
 	protected void registerSets() {
 		registerDefault(ParticleCaster.class, ThrusterControl.class);

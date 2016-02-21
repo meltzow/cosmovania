@@ -1,5 +1,7 @@
 package view.drawingProcessors.audio;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import model.ES.component.assets.AudioSource;
 import model.ES.component.assets.Model;
 import model.ES.component.motion.PlanarStance;
@@ -17,8 +19,12 @@ import com.simsilica.es.Entity;
 
 import controller.ECS.Processor;
 
-public class AudioSourcePlacingProc extends Processor {
+public class AudioSourcePlacingProc extends Processor implements JmeProcessor {
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.AUDIO;
+	}
+	
 	@Override
 	protected void registerSets() {
 		registerDefault(AudioSource.class, PlanarStance.class);

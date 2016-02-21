@@ -1,5 +1,7 @@
 package view.drawingProcessors.ui;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import model.ES.component.debug.VelocityViewing;
 import model.ES.component.motion.PlanarStance;
 import model.ES.richData.VelocityView;
@@ -17,7 +19,11 @@ import com.simsilica.es.EntitySet;
 
 import controller.ECS.Processor;
 
-public class VelocityVisualisationProc extends Processor {
+public class VelocityVisualisationProc extends Processor implements JmeProcessor  {
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
 
 	@Override
 	protected void registerSets() {

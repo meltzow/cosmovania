@@ -3,6 +3,9 @@ package view.drawingProcessors.audio;
 import java.util.HashMap;
 import java.util.Map;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.jme3.audio.AudioNode;
 import com.simsilica.es.Entity;
 
@@ -13,9 +16,13 @@ import model.ES.component.assets.AudioSource;
 import util.LogUtil;
 import view.SpatialPool;
 
-public class AudioSourceProc extends Processor {
+public class AudioSourceProc extends Processor implements JmeProcessor {
 	Map<String, AudioNode> soundPrototypes = new HashMap<>();
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.AUDIO;
+	}
+	
 	@Override
 	protected void registerSets() {
 		registerDefault(AudioSource.class);

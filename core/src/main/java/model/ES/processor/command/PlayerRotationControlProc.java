@@ -1,5 +1,7 @@
 package model.ES.processor.command;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import model.Command;
 import model.ES.component.ability.PlayerControl;
 import model.ES.component.motion.PlanarNeededRotation;
@@ -14,9 +16,13 @@ import com.simsilica.es.Entity;
 import controller.ECS.DataState;
 import controller.ECS.Processor;
 
-public class PlayerRotationControlProc extends Processor {
+public class PlayerRotationControlProc extends Processor implements JmeProcessor {
 
 	private Command command; 
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.COMMAND;
+	}
 	
 	@Override
 	protected void onInitialized(AppStateManager stateManager) {

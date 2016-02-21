@@ -3,6 +3,8 @@ package view.drawingProcessors.sprite;
 import java.util.HashMap;
 import java.util.Map;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import util.LogUtil;
 import util.math.AngleUtil;
 import view.SpatialPool;
@@ -23,8 +25,12 @@ import com.simsilica.es.Entity;
 import controller.ECS.Processor;
 import model.ES.component.assets.Sprite;
 
-public class SpriteProc extends Processor {
+public class SpriteProc extends Processor implements JmeProcessor {
 	Map<String, Spatial> spritePrototypes = new HashMap<>();
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
 	
 	@Override
 	protected void registerSets() {

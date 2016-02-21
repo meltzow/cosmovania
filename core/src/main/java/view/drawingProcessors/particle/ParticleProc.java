@@ -3,6 +3,9 @@ package view.drawingProcessors.particle;
 import java.util.ArrayList;
 import java.util.List;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh.Type;
 import com.jme3.effect.shapes.EmitterSphereShape;
@@ -22,9 +25,13 @@ import view.SpatialPool;
 import view.jme.MyParticleEmitter;
 import view.math.TranslateUtil;
 
-public class ParticleProc extends Processor {
+public class ParticleProc extends Processor implements JmeProcessor {
 	List<ParticleEmitter> toRemove = new ArrayList<ParticleEmitter>(); 
 
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
+	
 	@Override
 	protected void registerSets() {
 		registerDefault(ParticleCaster.class);

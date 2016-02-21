@@ -3,19 +3,26 @@ package view.drawingProcessors.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.ES.component.Naming;
+import model.ES.component.assets.Model;
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+import util.LogUtil;
+import view.SpatialPool;
+import app.AppFacade;
+
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.simsilica.es.Entity;
 
-import app.AppFacade;
 import controller.ECS.Processor;
-import model.ES.component.Naming;
-import model.ES.component.assets.Model;
-import util.LogUtil;
-import view.SpatialPool;
 
-public class ModelProc extends Processor {
+public class ModelProc extends Processor implements JmeProcessor {
 	Map<String, Spatial> modelPrototypes = new HashMap<>();
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
 	
 	@Override
 	protected void registerSets() {

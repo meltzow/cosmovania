@@ -1,5 +1,7 @@
 package model.ES.processor.command;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
 import util.LogUtil;
 import model.Command;
 import model.ES.component.ability.PlayerControl;
@@ -12,9 +14,13 @@ import com.simsilica.es.Entity;
 import controller.ECS.DataState;
 import controller.ECS.Processor;
 
-public class PlayerThrustControlProc extends Processor {
+public class PlayerThrustControlProc extends Processor implements JmeProcessor {
 
 	private Command command; 
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.COMMAND;
+	}
 	
 	@Override
 	protected void onInitialized(AppStateManager stateManager) {

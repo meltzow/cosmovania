@@ -3,6 +3,9 @@ package view.drawingProcessors.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import processor.JmeProcessor;
+import processor.JmeProcessor.TYPE;
+
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.scene.control.BillboardControl;
@@ -16,10 +19,14 @@ import model.ES.component.motion.PlanarStance;
 import util.LogUtil;
 import view.math.TranslateUtil;
 
-public class FloatingLabelProc extends Processor {
+public class FloatingLabelProc extends Processor implements JmeProcessor {
 	private BitmapFont font;
 	
 	private Map<EntityId, BitmapText> bitmaps = new HashMap<>();
+	
+	public TYPE getType() {
+		return JmeProcessor.TYPE.VISUAL;
+	}
 
 	public FloatingLabelProc() {
 		font = AppFacade.getAssetManager().loadFont("Interface/Fonts/Default.fnt");

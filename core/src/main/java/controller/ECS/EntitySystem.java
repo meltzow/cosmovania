@@ -44,7 +44,7 @@ public class EntitySystem extends AbstractAppState {
 	List<AppState> visualStates = new ArrayList<>();
 	List<AppState> audioStates = new ArrayList<>();
 	List<AppState> commandStates = new ArrayList<>();
-	List<AppState> logicStates = new ArrayList<>();
+//	List<AppState> logicStates = new ArrayList<>();
 
 	public EntitySystem(EntityData ed, Command command) {
 		this.ed = ed;
@@ -76,6 +76,7 @@ public class EntitySystem extends AbstractAppState {
 		
 		commandStates.add(new PlayerRotationControlProc());
 		commandStates.add(new PlayerThrustControlProc());
+		commandStates.add(new CameraPlacingProc());
 		commandStates.add(new CameraPlacingProc());
 	}
 	
