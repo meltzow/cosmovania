@@ -14,7 +14,7 @@ import model.ES.serial.PrototypeCreator;
 
 /**
  * Must be called before ToRemove processor
- * @author Benoît
+ * @author BenoÃ®t
  *
  */
 public class SpawnOnDecayProc extends Processor {
